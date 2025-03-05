@@ -26,7 +26,6 @@ If you don't have OmniMIDI, you can choose the "WinMM" device.
 Install xmake on your environment, configure the project and build it
 
 ````
-xmake f
 xmake
 ````
 
