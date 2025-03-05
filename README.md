@@ -1,5 +1,8 @@
 # ConMIDI
 
+
+This fork of ConMIDI uses the new cross platform [OmniMIDI](https://github.com/KeppySoftware/OmniMIDIv2) library which is in development.
+
 ConMIDI is a lightweight console MIDI player, being the successor to [SharpMIDI v2.4.1](https://github.com/EmK530/SharpMIDI/releases/tag/v2.4.1).
 
 Written in C to achieve insane performance. Able to achieve around 100M NPS with OmniMIDI on my Ryzen 7 1700 at 3.75GHz
@@ -14,13 +17,18 @@ Recommended use with this MIDI player for performance is the [OmniMIDI](https://
 
 If you don't have OmniMIDI, you can choose the "WinMM" device.
 
+## New Updates:
+- Added -i flag for better midi file path input
+- Implemeted debuging functions
+
 ## How to build
 
-Get yourself a copy of GCC and use this command:
+Install xmake on your environment, configure the project and build it
 
-```
-gcc ConMIDI.c Essentials.c BufferFile.c MIDI\LoadMIDI.c Sound\Sound.c Sound\WinMM.c Sound\KDMAPI.c Playback\MainPlayer.c Playback\MIDIClock.c MIDI\DataStorage.c -O3 -Os -s -lcomdlg32 -o ConMIDI
-```
+````
+xmake f
+xmake
+````
 
 ## Credits
 
