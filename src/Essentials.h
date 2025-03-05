@@ -13,6 +13,7 @@ double getTimeMsec(void);
 
 
 void terminal_setup();
+void ncurses_setup();
 void info_log(const char * fmt, ...);
 void success_log(const char * fmt, ...);
 void warn_log(const char * fmt, ...);

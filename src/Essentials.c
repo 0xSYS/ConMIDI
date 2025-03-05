@@ -4,6 +4,7 @@
 #include <sys/time.h>
 #include <stdarg.h>
 #include <stdbool.h>
+#include <ncurses.h>
 
 #ifdef _WIN32
     #define WIN32_LEAN_AND_MEAN
@@ -112,6 +113,14 @@ void terminal_setup()
     SetConsoleOutputCP(CP_UTF8); //Enabling unicode charset on windows console
 }
 #endif
+
+void ncurses_setup()
+{
+    // Set up the ncurses things
+    initscr();
+    noecho();
+    cbreak();
+}
 
 // Logging functions
 void info_log(const char *fmt, ...)

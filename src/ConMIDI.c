@@ -55,6 +55,8 @@ char cli_help[] =
 int main(int argc, char *argv[])
 {
     printf("ConMIDI %s\n\n", version);
+
+    // ncurses_setup();
     
     if (argc > 1)
     {
@@ -178,7 +180,7 @@ int main(int argc, char *argv[])
         {
           if (access(midiPath, F_OK) == -1)
           {
-              err_log(1, "\"%s\" Does not exists !");
+              err_log(0, "\"%s\" Does not exists !");
           }
           else
           {
@@ -187,6 +189,7 @@ int main(int argc, char *argv[])
               unsigned int bufSize = 64;
               info_log("Loading MIDI File...");
               LoadMIDI(midiPath, bufSize);
+              // ncurses_setup();
           }
         }
     return 0;
