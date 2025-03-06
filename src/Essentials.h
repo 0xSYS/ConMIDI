@@ -4,6 +4,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+#include <pthread.h>
+
+static pthread_t midiPlayerThr;
 
 int intInput(char* text);
 void removeSymbol(char text[], char symbol, char* clean);
@@ -18,5 +21,6 @@ void info_log(const char * fmt, ...);
 void success_log(const char * fmt, ...);
 void warn_log(const char * fmt, ...);
 void err_log(bool is_exit, const char * fmt, ...);
+void terminateConMIDI();
 
 #endif

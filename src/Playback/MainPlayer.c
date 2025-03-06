@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <unistd.h>
+#include <ncurses.h>
 #include "MIDIClock.h"
 #include "../Sound/Sound.h"
 #include "../MIDI/DataStorage.h"
@@ -14,6 +15,8 @@ typedef unsigned char byte;
 #define FALSE 0
 BOOL metaAllow[10] = {FALSE, FALSE, FALSE, FALSE, FALSE, TRUE, FALSE, FALSE, FALSE, FALSE};
 BOOL showFpsOutsideLag = TRUE;
+
+int termLine = 0; //The index number for printing text to new lines
 
 unsigned long int *currEvent;
 unsigned long int *trackReadOffset;
@@ -59,13 +62,19 @@ void StartTimeCheck()
             float calc = (float)1 / ((float)(tempT - startTime2) / (float)1000 / (float)totalFrames);
             if (showFpsOutsideLag)
             {
-                printf("\nFPS: %.10g", calc);
+                // printf("\nFPS: %.10g", calc);
+                //printw("FPS: %.10g", calc);
+                // mvprintw(termLine++, 0, "FPS: %.10g", calc);
+                move(0, 0);
+                printw("FPS: %.10g", calc);
+                refresh();
             }
             else
             {
                 if (calc < 60)
                 {
                     warn_log("Lag detected, FPS: %.10g", calc);
+                    refresh();
                 }
             }
             // printf("\nFPS: %.10g",);
@@ -150,6 +159,10 @@ void StartPlayback()
     startTime2 = getTimeMsec();
     cppq = ppq;
     Clock_Start();
+    
+    ncurses_setup(); // Setup for ncurses
+    clrtoeol(); // Clear leftover from previous prints
+    
     SendDirectData = SendDirectDataPtr;
     SendDirectLongData = SendDirectLongDataPtr;
     PrepareLongData = PrepareLongDataPtr;
@@ -326,7 +339,8 @@ void StartPlayback()
                                                     metaPrint(readEvent);
                                                     for (int i = 0; i < len; i++)
                                                     {
-                                                        printf("%c", range[i]);
+                                                        printw("%c", range[i]);
+                                                        refresh();
                                                     }
                                                     free(range);
                                                 }
@@ -401,7 +415,8 @@ void StartPlayback()
                                     metaPrint(metaType);
                                     for (int i = 0; i < len; i++)
                                     {
-                                        printf("%c", range[i]);
+                                        printw("%c", range[i]);
+                                        refresh();
                                     }
                                     free(range);
                                     break;
@@ -433,10 +448,13 @@ void StartPlayback()
         }
         else
         {
+            refresh();
+            // doupdate();
             usleep(1000);
         }
         if (aliveTracks == 0)
         {
+            endwin();
             info_log("Ran out of events\nPlayback finished.");
             sleep(3);
             exit(0);

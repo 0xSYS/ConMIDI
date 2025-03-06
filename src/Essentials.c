@@ -1,4 +1,7 @@
 // #include <cstdarg>
+// #include <cstdarg>
+#include "termanip.h"
+#include <pthread.h>
 #include <stdio.h>
 #include <time.h>
 #include <sys/time.h>
@@ -119,7 +122,18 @@ void ncurses_setup()
     // Set up the ncurses things
     initscr();
     noecho();
+    curs_set(FALSE);
+    scrollok(stdscr, TRUE);
     cbreak();
+}
+
+
+
+void internal_vprintf(const char * fmt, va_list args)
+{
+    char buf[1024];
+    vsnprintf(buf, sizeof(buf), fmt, args);
+    printw("%s", buf);
 }
 
 // Logging functions
@@ -129,6 +143,7 @@ void info_log(const char *fmt, ...)
     va_start(args, fmt);
     printf("ConMIDI: [\033[38;5;188mInfo\033[0m] -> ");
     vprintf(fmt, args);
+    // internal_vprintf(fmt, args);
     puts("");
     va_end(args);
 }
@@ -138,6 +153,7 @@ void success_log(const char *fmt, ...)
     va_list args;
     printf("ConMIDI: [\033[38;5;40mSuccess !\033[0m] -> ");
     vprintf(fmt, args);
+    // internal_vprintf(fmt, args);
     puts("");
     va_end(args);
 }
@@ -148,6 +164,7 @@ void warn_log(const char *fmt, ...)
     va_start(args, fmt);
     printf("ConMIDI: [\033[38;5;220mWarn\033[0m] -> ");
     vprintf(fmt, args);
+    // internal_vprintf(fmt, args);
     puts("");
     va_end(args);
 }
@@ -158,9 +175,27 @@ void err_log(bool is_exit, const char *fmt, ...)
     va_start(args, fmt);
     printf("ConMIDI: [\033[38;5;196mErr\033[0m] -> ");
     vprintf(fmt, args);
+    // internal_vprintf(fmt, args);
     puts("");
     va_end(args);
 
     if(is_exit == true)
       exit(1);
+}
+
+
+void terminateConMIDI()
+{
+    // Safely quit ConMIDI witout segfault
+
+
+    // pthread_detach(keyHandle);
+    // pthread_detach(midiPlayerThr);
+    
+    // Ncurses stuff
+    endwin();
+
+
+    // And finally quit ConMIDI
+    exit(0);
 }
