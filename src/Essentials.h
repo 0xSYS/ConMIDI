@@ -15,8 +15,12 @@ char* concat(const char* str1, const char* str2);
 double getTimeMsec(void);
 
 
-void terminal_setup();
+#ifdef _WIN32
+  void win_32terminal_setup();
+#endif
 void ncurses_setup();
+void printKeyBinds();
+void pauseUnpausePlayback();
 void info_log(const char * fmt, ...);
 void success_log(const char * fmt, ...);
 void warn_log(const char * fmt, ...);

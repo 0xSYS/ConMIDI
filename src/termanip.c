@@ -34,13 +34,17 @@ void* keyListener(void * arg)
 		  // exit(0);
 		  terminateConMIDI();
 		}
+		else if(key == ' ')
+		{
+			pauseUnpausePlayback();
+		}
 	  else
 	  {
-	  	int row = 0;
+	  	int row = 5;
 	  	mvprintw(row++, 0, "The pressed key is %c", key);
 	  	// attron(A_BOLD);
 	  	// printw("%c", key);
-	  	attroff(A_BOLD);
+	  	// attroff(A_BOLD);
 	  }
 	  refresh();			/* Print it on to the real screen */
 	  getch();

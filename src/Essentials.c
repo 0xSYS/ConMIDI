@@ -1,7 +1,10 @@
 // #include <cstdarg>
 // #include <cstdarg>
 #include "termanip.h"
+#include "Sound/KDMAPI.h"
+
 #include <pthread.h>
+#include <signal.h>
 #include <stdio.h>
 #include <time.h>
 #include <sys/time.h>
@@ -24,6 +27,7 @@
 
 char ntdllAvailable = 0;
 signed long long start = 0;
+bool ncursesMode = false;
 
 int intInput(char *text)
 {
@@ -84,7 +88,7 @@ static HANDLE stdoutHandle, stdinHandle;
 static DWORD outModeInit, inModeInit;
 
 // Enables ansi escapes on windows terminal
-void terminal_setup()
+void win32_terminal_setup()
 {
     DWORD outMode = 0, inMode = 0;
     stdoutHandle = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -184,6 +188,40 @@ void err_log(bool is_exit, const char *fmt, ...)
 }
 
 
+void pauseUnpausePlayback()
+{
+    bool state = false;
+    state = !state;
+
+    // Some toggle thingy
+    if(state)
+    {
+        // Pause the playback thread
+        move(4, 0);
+        printw("Paused");
+        pthread_kill(midiPlayerThr, SIGSTOP);
+    }
+
+    if(!state)
+    {
+        // Resume the playback thread
+        move(4, 0);
+        clear();
+        pthread_kill(midiPlayerThr, SIGCONT);
+    }
+}
+
+
+void printKeyBinds()
+{
+    // ghgf
+    move(0, 0);
+    printw("Press space to pause & unpause");
+    move(1, 0);
+    printw("Press 'q' to quit");
+}
+
+
 void terminateConMIDI()
 {
     // Safely quit ConMIDI witout segfault
@@ -191,6 +229,10 @@ void terminateConMIDI()
 
     // pthread_detach(keyHandle);
     // pthread_detach(midiPlayerThr);
+    
+    // Safely terminate OmniMIDI from processing events so it won't seg fault
+    info_log("Terminating KDMAPI...");
+    KDMAPI_TerminateKDMAPIStream();
     
     // Ncurses stuff
     endwin();

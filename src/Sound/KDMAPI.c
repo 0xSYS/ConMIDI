@@ -35,6 +35,12 @@ int KDMAPI_Setup()
         return 0;
     }
 
+    if((KDMAPI_TerminateKDMAPIStream = (KDM_INIT)dlsym(KDMAPI_libHandle, "TerminateKDMAPIStream")) == NULL)
+    {
+        err_log(0, "dlsym() TerminateKDMAPIStream failed: %s", dlerror());
+        return 0;
+    }
+
     
 
     success_log("KDMAPI Functional");

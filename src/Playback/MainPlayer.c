@@ -1,10 +1,16 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <ncurses.h>
+
+
 #include "MIDIClock.h"
 #include "../Sound/Sound.h"
 #include "../MIDI/DataStorage.h"
 #include "../Essentials.h"
+
+
+
+
 unsigned long long sentEvents = 0;
 unsigned long totalFrames = 0;
 double startTime1 = 0;
@@ -65,7 +71,7 @@ void StartTimeCheck()
                 // printf("\nFPS: %.10g", calc);
                 //printw("FPS: %.10g", calc);
                 // mvprintw(termLine++, 0, "FPS: %.10g", calc);
-                move(0, 0);
+                move(3, 0);
                 printw("FPS: %.10g", calc);
                 refresh();
             }
@@ -162,6 +168,8 @@ void StartPlayback()
     
     ncurses_setup(); // Setup for ncurses
     clrtoeol(); // Clear leftover from previous prints
+    printKeyBinds();
+    
     
     SendDirectData = SendDirectDataPtr;
     SendDirectLongData = SendDirectLongDataPtr;

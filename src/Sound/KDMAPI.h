@@ -8,6 +8,7 @@ typedef void (*KDM_SEND)(unsigned long int);
 typedef int (*KDM_LSEND)(MIDIHDR*, unsigned int);
 
 extern KDM_INIT KDMAPI_InitializeKDMAPIStream;
+extern KDM_INIT KDMAPI_TerminateKDMAPIStream;
 extern KDM_SEND KDMAPI_SendDirectData;
 extern KDM_LSEND KDMAPI_SendDirectLongData;
 extern KDM_LSEND KDMAPI_PrepareLongData;
