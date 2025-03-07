@@ -2,6 +2,7 @@
 #include <pthread.h>
 #include <ncurses.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 
 #include "Essentials.h"
@@ -18,36 +19,31 @@ void* ThreadTest1(void* arg)
 
 void* keyListener(void * arg)
 {
-	//#ifdef FULL_DBG
+	#ifdef FULL_DBG
 	  info_log("keyListener() thread: %d", *(int*)arg);
-	//#endif
+	#endif
 	while(TRUE)
 	{
 		key = getch();
-		if(key == 'q')		/* Without keypad enabled this will */
+
+		if(key != ERR)
 		{
-			// move(2, 1);
-		  // printw("F1 Key pressed");/*  not get to us either	*/
-					                     /* Without noecho() some ugly escape
-					                      * charachters might have been printed
-					                      * on screen			*/
-		  // exit(0);
-		  terminateConMIDI();
+			if(key == 'q')
+			{
+				endwin();
+				terminateConMIDI();
+			}
+			else if(key == ' ')
+			{
+				// move(4, 0);
+				// printw("Space Pressed");
+				pauseUnpausePlayback();
+			}
 		}
-		else if(key == ' ')
-		{
-			pauseUnpausePlayback();
-		}
-	  else
-	  {
-	  	int row = 5;
-	  	mvprintw(row++, 0, "The pressed key is %c", key);
-	  	// attron(A_BOLD);
-	  	// printw("%c", key);
-	  	// attroff(A_BOLD);
-	  }
-	  refresh();			/* Print it on to the real screen */
-	  getch();
+
+		usleep(50000);
+		  // terminateConMIDI();
+			// pauseUnpausePlayback();
 	}
 	return NULL;
 }

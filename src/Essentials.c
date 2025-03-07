@@ -126,6 +126,7 @@ void ncurses_setup()
     // Set up the ncurses things
     initscr();
     noecho();
+    // nodelay(stdscr, TRUE);
     curs_set(FALSE);
     scrollok(stdscr, TRUE);
     cbreak();
@@ -190,23 +191,22 @@ void err_log(bool is_exit, const char *fmt, ...)
 
 void pauseUnpausePlayback()
 {
-    bool state = false;
-    state = !state;
+    static bool state = false;
+    state ^= 1;
 
     // Some toggle thingy
     if(state)
     {
         // Pause the playback thread
-        move(4, 0);
-        printw("Paused");
+        move(5, 0);
+        printw("Playback paused");
         pthread_kill(midiPlayerThr, SIGSTOP);
     }
-
     if(!state)
     {
         // Resume the playback thread
-        move(4, 0);
-        clear();
+        move(5, 0);
+        clrtoeol();
         pthread_kill(midiPlayerThr, SIGCONT);
     }
 }
@@ -229,15 +229,17 @@ void terminateConMIDI()
 
     // pthread_detach(keyHandle);
     // pthread_detach(midiPlayerThr);
+
+    // Ncurses stuff
+    endwin();
+
+    fflush(stdout);
     
     // Safely terminate OmniMIDI from processing events so it won't seg fault
     info_log("Terminating KDMAPI...");
     KDMAPI_TerminateKDMAPIStream();
-    
-    // Ncurses stuff
-    endwin();
 
-
+    // endwin();
     // And finally quit ConMIDI
     exit(0);
 }

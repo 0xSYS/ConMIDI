@@ -72,8 +72,10 @@ void StartTimeCheck()
                 //printw("FPS: %.10g", calc);
                 // mvprintw(termLine++, 0, "FPS: %.10g", calc);
                 move(3, 0);
+                // clear();
                 printw("FPS: %.10g", calc);
                 refresh();
+                // clear();
             }
             else
             {

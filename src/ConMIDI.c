@@ -212,5 +212,6 @@ int main(int argc, char *argv[])
               // LoadMIDI(midiPath, bufSize);
           }
         }
+    // endwin();
     return 0;
 }
