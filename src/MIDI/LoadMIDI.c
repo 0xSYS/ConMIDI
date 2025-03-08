@@ -1,12 +1,22 @@
+#include "LoadMIDI.h"
+#include <ncurses.h>
+#include <pthread.h>
+#include <signal.h>
 #include <string.h>
+#include <unistd.h>
+
 #include "../BufferFile.h"
 #include "DataStorage.h"
 #include "../Playback/MainPlayer.h"
 #include "../Essentials.h"
+#include "../termanip.h"
 
 long long int lastPos = 0;
 unsigned long int lastSize = 0;
 double lastPrint = 0;
+
+
+
 
 int TextSearch(char text[])
 {
@@ -84,5 +94,14 @@ void LoadMIDI(char path[], unsigned int bs)
     free(buffer);
     fclose(midi);
     info_log("Starting playback...");
-    StartPlayback();
+
+    int threadID = 2;
+    int kHandleID = 1;
+    pthread_create(&keyHandle, NULL, keyListener, &kHandleID);
+    pthread_create(&playbackThread, NULL, StartPlayback, NULL);
+
+    pthread_join(playbackThread, NULL);
+    pthread_join(keyHandle, NULL);
+    
+    // StartPlayback();
 }

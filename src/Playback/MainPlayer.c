@@ -1,3 +1,5 @@
+#include "MainPlayer.h"
+#include <pthread.h>
 #include <stdio.h>
 #include <unistd.h>
 #include <ncurses.h>
@@ -6,6 +8,7 @@
 #include "MIDIClock.h"
 #include "../Sound/Sound.h"
 #include "../MIDI/DataStorage.h"
+#include "../MIDI/LoadMIDI.h"
 #include "../Essentials.h"
 
 
@@ -145,7 +148,7 @@ unsigned long int *cEv;
 BOOL *pStep;
 unsigned char *eT;
 byte *prevE;
-void StartPlayback()
+void* StartPlayback(void* arg)
 {
     double clock = 0;
     BOOL trackFinished[realTracks];
@@ -179,6 +182,14 @@ void StartPlayback()
     UnprepareLongData = UnprepareLongDataPtr;
     while (TRUE)
     {
+        move(15, 0);
+        printw("Bool test: %d", atomic_load(&PauseToggle));
+        while(atomic_load(&PauseToggle))
+        {
+            move(18, 0);
+            printw("sedfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsd");
+            usleep(100000);
+        }
         StartTimeCheck();
         double newClock = Clock_GetTick();
         if (newClock != clock)
@@ -455,11 +466,16 @@ void StartPlayback()
                 *prevE++;
                 *eT++;
             }
+                while(PauseToggle)
+                {
+                    move(12, 0);
+                    printw("Pause things");
+                    sleep(10);
+                }
         }
         else
         {
-            refresh();
-            // doupdate();
+            // refresh();
             usleep(1000);
         }
         if (aliveTracks == 0)
@@ -470,4 +486,6 @@ void StartPlayback()
             exit(0);
         }
     }
+
+    return NULL;
 }

@@ -1,12 +1,16 @@
 #ifndef ESSENTIALS_H
 #define ESSENTIALS_H
 
+#include <bits/pthreadtypes.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
 #include <pthread.h>
 
 static pthread_t midiPlayerThr;
+static pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;
+static pthread_cond_t cond = PTHREAD_COND_INITIALIZER;
+static volatile int pauseState = 1;
 
 int intInput(char* text);
 void removeSymbol(char text[], char symbol, char* clean);

@@ -1,5 +1,6 @@
 // #include <cstdarg>
 // #include <cstdarg>
+#include "MIDI/LoadMIDI.h"
 #include "termanip.h"
 #include "Sound/KDMAPI.h"
 
@@ -188,7 +189,6 @@ void err_log(bool is_exit, const char *fmt, ...)
       exit(1);
 }
 
-
 void pauseUnpausePlayback()
 {
     static bool state = false;
@@ -231,9 +231,11 @@ void terminateConMIDI()
     // pthread_detach(midiPlayerThr);
 
     // Ncurses stuff
-    endwin();
+    // endwin();
 
     fflush(stdout);
+
+    // pthread_cancel(playbackThread);
     
     // Safely terminate OmniMIDI from processing events so it won't seg fault
     info_log("Terminating KDMAPI...");
