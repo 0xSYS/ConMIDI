@@ -1,3 +1,10 @@
+
+
+
+#include <ncurses.h>
+
+
+
 #include "MIDIClock.h"
 #include "../Essentials.h"
 
@@ -52,7 +59,10 @@ void Clock_SubmitBPM(double pos, unsigned long int b)
     bpm = 60000000 / b;
     // printf("\nNew BPM: %f",bpm);
     puts("");
-    info_log("BPM Change: %f", bpm);
+    // info_log("BPM Change: %f", bpm);
+    move(4, 0);
+    printw("BPM Change: %f", bpm);
+    refresh();
     puts("");
     timeLost = 0;
     ticklen = ((double)1 / (double)cppq) * ((double)60 / bpm);

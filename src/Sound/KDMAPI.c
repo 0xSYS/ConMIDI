@@ -7,11 +7,16 @@
 void *KDMAPI_libHandle;
 KDM_INIT KDMAPI_InitializeKDMAPIStream;
 KDM_INIT KDMAPI_TerminateKDMAPIStream;
-KDM_INIT KDMAPI_ResetKDMAPIStream;
+KDM_SEND KDMAPI_ResetKDMAPIStream;
 KDM_SEND KDMAPI_SendDirectData;
 KDM_LSEND KDMAPI_SendDirectLongData;
 KDM_LSEND KDMAPI_PrepareLongData;
 KDM_LSEND KDMAPI_UnprepareLongData;
+KDM_SF_LIST KDMAPI_LoadCustomSoundfontList;
+KDM_FUNC_OUT KDMAPI_GetActiveVoices;
+KDM_INIT KDMAPI_IsKDMAPIAvailable;
+KDM_DRV_SETTING KDMAPI_DriverSettings;
+KDM_FUNC_OUT KDMAPI_GetRenderingTime;
 
 int KDMAPI_Setup()
 {
@@ -25,21 +30,65 @@ int KDMAPI_Setup()
     // Get function pointers using dlsym instead of GetProcAddress
     if ((KDMAPI_InitializeKDMAPIStream = (KDM_INIT)dlsym(KDMAPI_libHandle, "InitializeKDMAPIStream")) == NULL)
     {
-        err_log(0, "dlsym() InitializeKDMAPIStream failed: %s", dlerror());
+        err_log(0, "dlsym() failed to retrieve library symbol InitializeKDMAPIStream. Returned error: %s", dlerror());
         return 0;
     }
     
     if ((KDMAPI_SendDirectData = (KDM_SEND)dlsym(KDMAPI_libHandle, "SendDirectData")) == NULL)
     {
-        err_log(0, "dlysm() SendDirectData failed: %s", dlerror());
+        err_log(0, "dlysm() failed to retrieve library symbol SendDirectData. Returned error: %s", dlerror());
         return 0;
     }
 
     if((KDMAPI_TerminateKDMAPIStream = (KDM_INIT)dlsym(KDMAPI_libHandle, "TerminateKDMAPIStream")) == NULL)
     {
-        err_log(0, "dlsym() TerminateKDMAPIStream failed: %s", dlerror());
+        err_log(0, "dlsym() failed to retrieve library symbol TerminateKDMAPIStream. Returned error: %s", dlerror());
         return 0;
     }
+
+    if((KDMAPI_ResetKDMAPIStream = (KDM_SEND)dlsym(KDMAPI_libHandle, "ResetKDMAPIStream")) == NULL)
+    {
+        err_log(0, "dlsym() failed to retrieve library symbol ResetKDMAPIStream. Returned error: &s", dlerror());
+        return 0;
+    }
+
+    // It causes a seg fault for some reason Lmaooo :madman:
+    // if((KDMAPI_LoadCustomSoundfontList = (KDM_SF_LIST)dlsym(KDMAPI_libHandle, "LoadCustomSoundFontList")) == NULL)
+    // {
+    //     err_log(0, "dlsym() failed to retrieve library symbol LoadCustomSoundFontList. Returned error: %s", dlerror());
+    //     return 0;
+    // }
+
+     if((KDMAPI_GetRenderingTime = (KDM_FUNC_OUT)dlsym(KDMAPI_libHandle, "GetRenderingTime")) == NULL)
+     {
+         err_log(0, "dlsym() failed to retrieve library symbol GetRenderingTime. Returnned error: %s", dlerror());
+         return 0;
+     }
+
+     if((KDMAPI_GetActiveVoices = (KDM_FUNC_OUT)dlsym(KDMAPI_libHandle, "GetActiveVoices")) == NULL)
+     {
+         err_log(0, "dlsym() failed to retrieve library symbol GetActiveVoices. Returned error: %s", dlerror());
+         return 0;
+     }
+
+     if((KDMAPI_IsKDMAPIAvailable = (KDM_INIT)dlsym(KDMAPI_libHandle, "IsKDMAPIAvailable")) == NULL)
+     {
+         err_log(0, "dlsym() failed to retrieve library symbol IsKDMAPIAvailable. Returned error: %s", dlerror());
+         return 0;
+     }
+
+    if((KDMAPI_DriverSettings = (KDM_DRV_SETTING)dlsym(KDMAPI_libHandle, "DriverSettings")) == NULL)
+    {
+        err_log(0, "dlsym() failed to retrieve library symbol DriverSettings. Returned Error: %s", dlerror());
+        return 0;
+    }
+
+    /*
+    To import next:
+    GetActiveVoices
+    IsKDMAPIAvailable
+    DriverSettings
+    */
 
     
 
