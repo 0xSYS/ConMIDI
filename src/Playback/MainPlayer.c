@@ -198,6 +198,15 @@ void* StartPlayback(void* arg)
             move(4, 0);
             clrtoeol();
         }
+        // YESS THIS FINALLY WORKZZ
+        while(PlaybackPause)
+        {
+            if(PlaybackPause == false)
+            {
+                break;
+            }
+            usleep(700);
+        }
         pthread_mutex_unlock(&locker);
         StartTimeCheck();
         double newClock = Clock_GetTick();
