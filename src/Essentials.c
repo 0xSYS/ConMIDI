@@ -214,11 +214,8 @@ void pauseUnpausePlayback()
 
 void printKeyBinds()
 {
-    // ghgf
-    move(0, 0);
-    printw("Press space to pause & unpause");
-    move(1, 0);
-    printw("Press 'q' to quit");
+    mvprintw(0, 0, "Press space to pause & unpause");
+    mvprintw(1, 0, "Press 'q' to quit");
 }
 
 

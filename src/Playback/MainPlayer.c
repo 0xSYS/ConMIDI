@@ -191,14 +191,13 @@ void* StartPlayback(void* arg)
         // This is temporarry. It'll be handeled in the key handle thread
         if(PlaybackPause == true)
         {
-            mvprintw(4, 0, "Playback Paused");
+            mvprintw(2, 0, "Playback Paused");
         }
         else
         {
-            move(4, 0);
+            move(2, 0);
             clrtoeol();
-        }
-        // YESS THIS FINALLY WORKZZ
+        }        // YESS THIS FINALLY WORKZZ
         while(PlaybackPause)
         {
             if(PlaybackPause == false)
