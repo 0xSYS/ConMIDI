@@ -28,7 +28,7 @@
 
 char ntdllAvailable = 0;
 signed long long start = 0;
-bool ncursesMode = false;
+// bool ncursesMode = false;
 
 int intInput(char *text)
 {

@@ -58,12 +58,9 @@ void Clock_SubmitBPM(double pos, unsigned long int b)
     timee = pos + (Clock_GetElapsed() / ticklen);
     bpm = 60000000 / b;
     // printf("\nNew BPM: %f",bpm);
-    puts("");
     // info_log("BPM Change: %f", bpm);
-    move(4, 0);
-    printw("BPM Change: %f", bpm);
+    mvprintw(4, 0, "BPM Change: %f", bpm);
     refresh();
-    puts("");
     timeLost = 0;
     ticklen = ((double)1 / (double)cppq) * ((double)60 / bpm);
     timee += remainder;

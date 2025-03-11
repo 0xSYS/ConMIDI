@@ -79,6 +79,10 @@ int main(int argc, char *argv[])
                 {
                     printf("%s", cli_help);
                 }
+                else if(strcmp(read, "--no-ncurses") == 0)
+                {
+                    ncursesMode = FALSE;
+                }
                 else if(strcmp(read, "-i") == 0 || strcmp(read, "--input") == 0)
                 {
                     isMidiPath = TRUE;
@@ -195,3 +199,4 @@ int main(int argc, char *argv[])
     // endwin();
     return 0;
 }
+    

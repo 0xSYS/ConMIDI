@@ -10,7 +10,7 @@
 static pthread_t midiPlayerThr;
 static pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;
 static pthread_cond_t cond = PTHREAD_COND_INITIALIZER;
-static volatile int pauseState = 1;
+static volatile bool ncursesMode = false;
 
 int intInput(char* text);
 void removeSymbol(char text[], char symbol, char* clean);
