@@ -6,7 +6,8 @@
 
 extern int metaAllow[10];
 extern int showFpsOutsideLag;
-static atomic_bool PauseToggle = false;
+static volatile bool PlaybackPause = false;
 
 void* StartPlayback(void* arg);
+void PlaybackPauseToggle();
 #endif

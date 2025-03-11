@@ -152,7 +152,7 @@ int main(int argc, char *argv[])
         }
     }
     
-    // Idk what's the use of this, it seems useless
+    // This was used to set the console title on windows
     title = concat("ConMIDI ", version);
     prgTitle = title;
     // Check for sound engines
@@ -183,34 +183,13 @@ int main(int argc, char *argv[])
         {
           if (access(midiPath, F_OK) == -1)
           {
-              err_log(0, "\"%s\" Does not exists !");
+              err_log(1, "\"%s\" Does not exists !");
           }
           else
           {
-
-              // int t1 = 1;
-
               unsigned int bufSize = 64;
               info_log("Loading MIDI File...");
               LoadMIDI(midiPath, bufSize);
-              
-              // Run the key listener function on a separated thread so it won't mess up with the player thread.
-              /*
-              int temp = pthread_create(&keyHandle, NULL, keyListener, &t1);
-
-              if(temp == 1)
-              {
-                  printf("Failed to create keyhandle!\n");
-                  FILE * tempF;
-                  tempF = fopen("resultFile", "w");
-                  fprintf(tempF, "Failed to create key handle thread!!!");
-                  fclose(tempF);
-                  exit(1);
-              }
-              // pthread_create(&midiPlayerThr, NULL, startMidiPlayer, &t2);
-              
-              // pthread_join(midiPlayerThr, NULL);
-              pthread_join(keyHandle, NULL);*/
           }
         }
     // endwin();

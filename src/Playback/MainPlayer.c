@@ -35,6 +35,14 @@ unsigned char *eventType;
 byte *prevEvent;
 unsigned long long *trackPosition;
 
+
+
+// This is the only thing I could do to set the togglabe bool between 2 threads lmfaoo :madman:
+void PlaybackPauseToggle()
+{
+    PlaybackPause = !PlaybackPause;
+}
+
 char *AddCommas(const char *num)
 {
     int len = strlen(num);
@@ -72,13 +80,8 @@ void StartTimeCheck()
             if (showFpsOutsideLag)
             {
                 // printf("\nFPS: %.10g", calc);
-                //printw("FPS: %.10g", calc);
-                // mvprintw(termLine++, 0, "FPS: %.10g", calc);
-                move(3, 0);
-                // clear();
-                printw("FPS: %.10g", calc);
+                mvprintw(3, 0, "FPS: %.10g", calc);
                 refresh();
-                // clear();
             }
             else
             {
@@ -150,6 +153,7 @@ unsigned char *eT;
 byte *prevE;
 void* StartPlayback(void* arg)
 {
+    
     double clock = 0;
     BOOL trackFinished[realTracks];
     unsigned int aliveTracks = realTracks;
@@ -174,6 +178,7 @@ void* StartPlayback(void* arg)
     ncurses_setup(); // Setup for ncurses
     clrtoeol(); // Clear leftover from previous prints
     printKeyBinds();
+
     
     
     SendDirectData = SendDirectDataPtr;
@@ -182,14 +187,18 @@ void* StartPlayback(void* arg)
     UnprepareLongData = UnprepareLongDataPtr;
     while (TRUE)
     {
-        move(15, 0);
-        printw("Bool test: %d", atomic_load(&PauseToggle));
-        while(atomic_load(&PauseToggle))
+        pthread_mutex_lock(&locker);
+        // This is temporarry. It'll be handeled in the key handle thread
+        if(PlaybackPause == true)
         {
-            move(18, 0);
-            printw("sedfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsd");
-            usleep(100000);
+            mvprintw(4, 0, "Playback Paused");
         }
+        else
+        {
+            move(4, 0);
+            clrtoeol();
+        }
+        pthread_mutex_unlock(&locker);
         StartTimeCheck();
         double newClock = Clock_GetTick();
         if (newClock != clock)
@@ -466,12 +475,6 @@ void* StartPlayback(void* arg)
                 *prevE++;
                 *eT++;
             }
-                while(PauseToggle)
-                {
-                    move(12, 0);
-                    printw("Pause things");
-                    sleep(10);
-                }
         }
         else
         {
@@ -485,6 +488,7 @@ void* StartPlayback(void* arg)
             sleep(3);
             exit(0);
         }
+        // pthread_mutex_unlock(&locker);
     }
 
     return NULL;

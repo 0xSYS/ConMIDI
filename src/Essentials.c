@@ -229,6 +229,7 @@ void terminateConMIDI()
 
     // pthread_detach(keyHandle);
     // pthread_detach(midiPlayerThr);
+    pthread_mutex_destroy(&locker);
 
     // Ncurses stuff
     // endwin();

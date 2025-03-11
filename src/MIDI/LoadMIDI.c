@@ -95,9 +95,11 @@ void LoadMIDI(char path[], unsigned int bs)
     fclose(midi);
     info_log("Starting playback...");
 
+    pthread_mutex_init(&locker, NULL);
+
     int threadID = 2;
     int kHandleID = 1;
-    pthread_create(&keyHandle, NULL, keyListener, &kHandleID);
+    pthread_create(&keyHandle, NULL, keyListener, NULL);
     pthread_create(&playbackThread, NULL, StartPlayback, NULL);
 
     pthread_join(playbackThread, NULL);

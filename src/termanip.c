@@ -7,6 +7,7 @@
 
 
 #include "Essentials.h"
+#include "MIDI/LoadMIDI.h"
 #include "Playback/MainPlayer.h"
 #include "termanip.h"
 
@@ -21,11 +22,9 @@ void* ThreadTest1(void* arg)
 
 void* keyListener(void * arg)
 {
-	//#ifdef FULL_DBG
 	  // info_log("keyListener() thread: %d", *(int*)arg);
-	  move(9, 0);
-	  printw("Key Listener runing");
-//	#endif
+  // mvprintw(9, 0, "Key Listener runing");
+
 	while(TRUE)
 	{
 		key = getch();
@@ -39,14 +38,12 @@ void* keyListener(void * arg)
 				terminateConMIDI();
 			}
 			else if(key == ' ')
-			{	
-				// static bool PauseToggle = false;
-				//PauseToggle = !PauseToggle;
-				// pauseState = !pauseState;
+			{
+				pthread_mutex_lock(&locker);
+				PlaybackPauseToggle();
 
-				atomic_store(&PauseToggle, !atomic_load(&PauseToggle));
-
-				if(atomic_load(&PauseToggle))
+        
+				/*if(PlaybackPause)
 				{
 					move(7, 0);
 					printw("Playback Paused");
@@ -57,10 +54,9 @@ void* keyListener(void * arg)
 					move(7, 0);
 					clrtoeol();
 					// PlaybackUnpause();
-				}
-				
-        
-				
+				}*/
+
+				pthread_mutex_unlock(&locker);
 			}
 		}
 		usleep(50000);

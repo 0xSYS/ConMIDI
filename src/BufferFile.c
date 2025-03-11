@@ -1,5 +1,9 @@
 #include "BufferFile.h"
 #include "Essentials.h"
+
+
+
+
 typedef int BOOL;
 
 FILE *midi;
