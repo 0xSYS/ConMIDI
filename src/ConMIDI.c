@@ -6,6 +6,7 @@
 #include <pthread.h>
 
 #include "Essentials.h"
+#include "Sound/KDMAPI.h"
 #include "Sound/Sound.h"
 #include "MIDI/LoadMIDI.h"
 #include "Playback/MIDIClock.h"
@@ -22,8 +23,9 @@
 FILE *file_ptr;
 char version[] = "v2.0.9";
 char *title;
-char midiPath[260];
+// char midiPath[260];
 bool isMidiPath = FALSE;
+bool isSfList = FALSE;
 
 
 char cli_help[] =
@@ -35,8 +37,8 @@ char cli_help[] =
 "Hide meta text events\n\n"
 "\n"
 "\n"
-"\n"
-"\n"
+"--custom-sf-list <path/to/SoundfontList.json>\n"
+"Use a different soundfont list other than the OmniMIDI's default list.\n"
 "\n"
 "\n"
 "\n"
@@ -82,6 +84,11 @@ int main(int argc, char *argv[])
                 else if(strcmp(read, "--no-ncurses") == 0)
                 {
                     ncursesMode = FALSE;
+                }
+                else if(strcmp(read, "--custom-sf-list") == 0)
+                {
+                    isSfList = TRUE;
+                    strcat(customSfList, argv[i + 1]);    
                 }
                 else if(strcmp(read, "-i") == 0 || strcmp(read, "--input") == 0)
                 {
@@ -164,7 +171,16 @@ int main(int argc, char *argv[])
 
     
     // Start sound selection if more than one sound engine is available otherwise auto load only available engine
-    Sound_Init(1);
+    // Sound_Init(1);
+    
+    // Apply custom sounsfont list from CLI Options
+    if(isSfList)
+    {
+        info_log("Soundfont list path: %s", customSfList);
+        KDMAPI_LoadCustomSoundFontsList(customSfList);
+    }
+
+    Sound_Init(1);    
 
     // File path input
     // char path[260];

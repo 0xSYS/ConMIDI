@@ -214,8 +214,19 @@ void pauseUnpausePlayback()
 
 void printKeyBinds()
 {
-    mvprintw(0, 0, "Press space to pause & unpause");
-    mvprintw(1, 0, "Press 'q' to quit");
+    mvprintw(1, 0, "Press space to pause & unpause");
+    mvprintw(2, 0, "Press 'q' to quit");
+}
+
+
+void printStats()
+{
+    // sdfdsfdsf
+    mvprintw(0, 0, "Playing: %s", midiPath);
+
+    mvprintw(6, 0, "= = = = OmniMIDI realtime debug = = = =");
+    mvprintw(7, 0, "Active voices: %d", KDMAPI_GetActiveVoices());
+    mvprintw(8, 0, "Rendering time: %f", KDMAPI_GetRenderingTime());
 }
 
 

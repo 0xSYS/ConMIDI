@@ -15,4 +15,3 @@ static int key;
 
 
 void* keyListener(void * arg);
-void* ThreadTest1(void* arg);

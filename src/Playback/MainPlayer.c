@@ -10,6 +10,7 @@
 #include "../MIDI/DataStorage.h"
 #include "../MIDI/LoadMIDI.h"
 #include "../Essentials.h"
+#include "../Sound/KDMAPI.h"
 
 
 
@@ -80,7 +81,9 @@ void StartTimeCheck()
             if (showFpsOutsideLag)
             {
                 // printf("\nFPS: %.10g", calc);
-                mvprintw(3, 0, "FPS: %.10g", calc);
+                mvprintw(4, 0, "FPS: %.10g", calc);
+                // mvprintw(9, 0, "Active Voices: %d", FuncTest());
+                // printStats();
                 refresh();
             }
             else
@@ -176,7 +179,7 @@ void* StartPlayback(void* arg)
     Clock_Start();
     
     ncurses_setup(); // Setup for ncurses
-    clrtoeol(); // Clear leftover from previous prints
+    clrtoeol();      // Clear leftover from previous prints
     printKeyBinds();
 
     
@@ -191,11 +194,11 @@ void* StartPlayback(void* arg)
         // This is temporarry. It'll be handeled in the key handle thread
         if(PlaybackPause == true)
         {
-            mvprintw(2, 0, "Playback Paused");
+            mvprintw(3, 0, "Playback Paused");
         }
         else
         {
-            move(2, 0);
+            move(3, 0);
             clrtoeol();
         }        // YESS THIS FINALLY WORKZZ
         while(PlaybackPause)

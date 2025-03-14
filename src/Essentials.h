@@ -7,10 +7,20 @@
 #include <stdbool.h>
 #include <pthread.h>
 
+
+
+#define MAX_PATH 256
+
+
+
+
+
 static pthread_t midiPlayerThr;
 static pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;
 static pthread_cond_t cond = PTHREAD_COND_INITIALIZER;
 static volatile bool ncursesMode = false;
+static char midiPath[MAX_PATH];
+static char customSfList[MAX_PATH];
 
 int intInput(char* text);
 void removeSymbol(char text[], char symbol, char* clean);
@@ -29,6 +39,7 @@ void info_log(const char * fmt, ...);
 void success_log(const char * fmt, ...);
 void warn_log(const char * fmt, ...);
 void err_log(bool is_exit, const char * fmt, ...);
+void printStats();
 void terminateConMIDI();
 
 #endif

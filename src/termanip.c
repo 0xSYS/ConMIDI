@@ -13,11 +13,7 @@
 
 
 
-void* ThreadTest1(void* arg)
-{
-	info_log("ThreadTest1() thread: %d", *(int*)arg);
-	return NULL;
-}
+
 
 
 void* keyListener(void * arg)
